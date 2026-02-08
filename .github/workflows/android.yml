@@ -1,4 +1,4 @@
-namename: Build APK
+name: Build APK
 on: [push, pull_request]
 
 jobs:
@@ -7,23 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-
-      - name: Install Dependencies
-        run: |
-          pip install buildozer cython==0.29.33
-          sudo apt-get install -y scons libncurses5 libstdc++6 zlib1g-dev libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good
-
       - name: Build with Buildozer
-        run: |
-          yes | buildozer init
-          # تنظیمات نام برنامه
-          sed -i 's/^title = .*/title = AmirKabir RP/' buildozer.spec
-          sed -i 's/^package.name = .*/package.name = amirkabirrp/' buildozer.spec
-          # اضافه کردن فرمت عکس به فایل تنظیمات
-          sed -i 's/^source.include_exts = .*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
-          # شروع پخت APK
-          buildozer android debug
+        uses: ArtemSerebriakov/buildozer-action@v1
+        with:
+          buildozer_version: master
+          command: buildozer android debug
+          repository_root: .
